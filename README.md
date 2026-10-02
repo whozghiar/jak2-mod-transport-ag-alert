@@ -21,7 +21,7 @@
 While Haven City is on **alert (level ≥ 1)**, a **Crimson Guard Troop Transport** (`transport-ag`, the retail drop-ship) descends near the player roughly **once per minute**, deploys a squad of Crimson Guards, and departs. It is a scripted reinforcement actor tied to the city alert system.
 
 - **Target Game:** Jak 2
-- **Active Branch:** `jak2/features/transport-ag/alert`
+- **Repository:** [`whozghiar/jak2-mod-transport-ag-alert`](https://github.com/whozghiar/jak2-mod-transport-ag-alert)
 
 ## ✨ Key Features
 - **Feature:** Scripted troop drop-ship spawns 10–18 m from the player during city alerts (level ≥ 1).
@@ -87,7 +87,7 @@ For the complete technical breakdown, architecture, and developer notes, refer t
 Tant qu'Abriville est en **alerte (niveau ≥ 1)**, un **Transport de Troupes des Gardes Grenat** (`transport-ag`, le drop-ship du jeu d'origine) descend près du joueur environ **une fois par minute**, déploie une escouade de Gardes Grenat, puis repart. Il s'agit d'un renfort scripté directement relié à l'état d'alerte de la ville.
 
 - **Jeu Ciblé :** Jak 2
-- **Branche Active :** `jak2/features/transport-ag/alert`
+- **Dépôt :** [`whozghiar/jak2-mod-transport-ag-alert`](https://github.com/whozghiar/jak2-mod-transport-ag-alert)
 
 ## ✨ Fonctionnalités Clés
 - **Fonctionnalité :** Apparition d'un drop-ship de troupes à 10–18 m du joueur en situation d'alerte (niveau ≥ 1).
