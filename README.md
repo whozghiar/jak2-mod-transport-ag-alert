@@ -3,7 +3,6 @@
 <p align="center">
   <img src="https://img.shields.io/badge/OpenGOAL-Mod-blue.svg" alt="OpenGOAL Mod">
   <img src="https://img.shields.io/badge/Game-Jak%202-orange.svg" alt="Game">
-  <img src="https://img.shields.io/badge/Branch-jak2%2Ffeatures%2Ftransport--ag%2Falert-green.svg" alt="Branch">
   <img src="https://img.shields.io/badge/AI--assisted-Modding-purple.svg" alt="AI Assisted">
 </p>
 
@@ -14,6 +13,9 @@
 ---
 
 # 🇬🇧 English Version
+
+> [!NOTE]
+> This mod moved from the `jak2/features/transport-ag/alert` branch of [whozghiar/jak-project](https://github.com/whozghiar/jak-project) to this repository. Earlier releases stay installable from the launcher catalog.
 
 ## 📖 Overview
 While Haven City is on **alert (level ≥ 1)**, a **Crimson Guard Troop Transport** (`transport-ag`, the retail drop-ship) descends near the player roughly **once per minute**, deploys a squad of Crimson Guards, and departs. It is a scripted reinforcement actor tied to the city alert system.
