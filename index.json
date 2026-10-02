@@ -1,11 +1,11 @@
 {
   "schemaVersion": "1.0.0",
   "sourceName": "KG-Transporter Alert Source",
-  "lastUpdated": "2026-10-02T14:18:28Z",
+  "lastUpdated": "2026-10-02T23:00:57Z",
   "mods": {
     "transport-ag-alert": {
       "displayName": "KG-Transporter Alert",
-      "description": "While Haven City is on **alert (level ≥ 1)**, a **Crimson Guard Troop Transport** (`transport-ag`, the retail drop-ship) descends near the player roughly **once per minute**, deploys a squad of Crimson Guards, and departs. It is a scripted reinforcement actor tied to the city alert system.",
+      "description": "While Haven City is on alert (level ≥ 1), a Crimson Guard Troop Transport (`transport-ag`, the retail drop-ship) descends near the player roughly **once per minute**, deploys a squad of Crimson Guards, and departs. It is a scripted reinforcement actor tied to the city alert system.",
       "authors": [
         "whozghiar"
       ],
@@ -20,17 +20,17 @@
       "versions": [
         {
           "version": "1.0.0",
-          "publishedDate": "2026-09-17T14:48:00Z",
+          "publishedDate": "2026-10-02T23:00:57Z",
           "supportedGames": [
             "jak2"
           ],
           "assets": {
-            "windows": "https://github.com/whozghiar/jak-project/releases/download/transport-ag-alert-v1.0.0/windows-transport-ag-alert-v1.0.0.zip",
-            "linux": "https://github.com/whozghiar/jak-project/releases/download/transport-ag-alert-v1.0.0/linux-transport-ag-alert-v1.0.0.zip"
+            "windows": "https://github.com/whozghiar/jak2-mod-transport-ag-alert/releases/download/transport-ag-alert-v1.0.0/windows-transport-ag-alert-v1.0.0.zip",
+            "linux": "https://github.com/whozghiar/jak2-mod-transport-ag-alert/releases/download/transport-ag-alert-v1.0.0/linux-transport-ag-alert-v1.0.0.zip"
           },
           "checksums": {
-            "windows": "",
-            "linux": ""
+            "windows": "2d4bacd0afc10a2cb900d38f4efd2143404a7e2735ce68f3871810327e0bb234",
+            "linux": "f9de5f7dd8cd3e48ecf2b43e1fd5af538c80b400a4748a1ccb83b01cb253dfef"
           }
         }
       ],
