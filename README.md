@@ -65,9 +65,9 @@ Mods ▸ transport-ag-alert ▸ Enable
 The choice persists across level reloads. Turn it off to restore vanilla traffic.
 
 ## 🎥 Demonstration Video
-[![Demonstration Video](https://img.youtube.com/vi/yF5ZNcgOR10 /maxresdefault.jpg)](https://youtu.be/yF5ZNcgOR10 )
+[![Demonstration Video](https://img.youtube.com/vi/yF5ZNcgOR10/maxresdefault.jpg)](https://youtu.be/yF5ZNcgOR10)
 
-▶️ **[Watch the demonstration video on YouTube](https://youtu.be/yF5ZNcgOR10 )**
+▶️ **[Watch the demonstration video on YouTube](https://youtu.be/yF5ZNcgOR10)**
 
 ## 📖 Technical Documentation
 For the complete technical breakdown, architecture, and developer notes, refer to:
