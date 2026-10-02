@@ -1,4 +1,4 @@
-# Crimson Guard Alert Drop-Ship / Transport de Troupes d'Alerte
+# Crimson Guard Alert Drop-Ship
 
 <p align="center">
   <img src="https://img.shields.io/badge/OpenGOAL-Mod-blue.svg" alt="OpenGOAL Mod">
@@ -6,13 +6,7 @@
   <img src="https://img.shields.io/badge/AI--assisted-Modding-purple.svg" alt="AI Assisted">
 </p>
 
-<p align="center">
-  <a href="#-english-version"><b>🇬🇧 English Version</b></a> &nbsp;•&nbsp; <a href="#-version-française"><b>🇫🇷 Version Française</b></a>
-</p>
-
 ---
-
-# 🇬🇧 English Version
 
 > [!NOTE]
 > This mod moved from the `jak2/features/transport-ag/alert` branch of [whozghiar/jak-project](https://github.com/whozghiar/jak-project) to this repository. Earlier releases stay installable from the launcher catalog.
@@ -25,7 +19,7 @@ While Haven City is on **alert (level ≥ 1)**, a **Crimson Guard Troop Transpor
 
 ## ✨ Key Features
 - **Feature:** Scripted troop drop-ship spawns 10–18 m from the player during city alerts (level ≥ 1).
-- **Feature:** Realistic opening hatch sequence with sound effects and squad deployment of Crimson Guards.
+- **Feature:** Realistic opening rear-hatch sequence with sound effects and squad deployment of Crimson Guards on the ground.
 - **Feature:** Strict 60-second cooldown ensuring at most one transport per minute.
 - **Feature:** `.fr3` merc geometry injection into `lwidea/b/c.fr3` for seamless Haven City free-roam rendering.
 
@@ -77,75 +71,6 @@ The choice persists across level reloads. Turn it off to restore vanilla traffic
 
 ## 📖 Technical Documentation
 For the complete technical breakdown, architecture, and developer notes, refer to:
-- 📄 [`docs/modding/current_mod/transport_alert_readme.md`](docs/modding/current_mod/transport_alert_readme.md)
-
----
-
-# 🇫🇷 Version Française
-
-## 📖 Présentation du Mod
-Tant qu'Abriville est en **alerte (niveau ≥ 1)**, un **Transport de Troupes des Gardes Grenat** (`transport-ag`, le drop-ship du jeu d'origine) descend près du joueur environ **une fois par minute**, déploie une escouade de Gardes Grenat, puis repart. Il s'agit d'un renfort scripté directement relié à l'état d'alerte de la ville.
-
-- **Jeu Ciblé :** Jak 2
-- **Dépôt :** [`whozghiar/jak2-mod-transport-ag-alert`](https://github.com/whozghiar/jak2-mod-transport-ag-alert)
-
-## ✨ Fonctionnalités Clés
-- **Fonctionnalité :** Apparition d'un drop-ship de troupes à 10–18 m du joueur en situation d'alerte (niveau ≥ 1).
-- **Fonctionnalité :** Séquence animée d'ouverture de la porte arrière avec bruitages et largage au sol d'une escouade de gardes.
-- **Fonctionnalité :** Cooldown strict de 60 secondes garantissant un maximum d'un drop-ship par minute.
-- **Fonctionnalité :** Injection de géométrie merc `.fr3` dans `lwidea/b/c.fr3` pour un rendu natif en exploration libre d'Abriville.
-
-## 🚀 Guide Pas à Pas pour Lancer le Mod
-
-### 1. Sélectionner le Jeu Actif
-Assurez-vous que l'environnement cible Jak 2 :
-```bash
-task set-game-jak2
-```
-
-### 2. Compilation des Binaires
-- **Statut :** Requise (Couche 1 & Couche 2 — Décompilateur & Runtime)
-- **Détails :** Compile le runtime, le compilateur et le décompilateur nécessaires à l'extraction des assets :
-```bash
-task build-release-game
-task build-release-decomp
-```
-
-### 3. Extraction des Données (Assets)
-- **Statut :** Extraction personnalisée requise (Couche 2)
-- **Détails :** Relancez l'extraction pour intégrer les assets modifiés et la configuration du décompilateur (`transport-ag` injecté dans `lwide*.fr3`) :
-```bash
-task extract
-```
-
-### 4. Lancer le Jeu
-Lancez le jeu nativement :
-```bash
-task boot-game
-```
-*(Ou itérez rapidement via le REPL OpenGOAL avec `task repl`, puis rechargez à chaud avec `(mi)` et `(r)`).*
-
-### 5. Activer le Mod (DÉSACTIVÉ par défaut)
-Ce mod est livré **désactivé** — une installation neuve joue Abriville exactement
-comme dans Jak 2 d'origine (pas de drop-ship d'alerte, transports scriptés de
-l'histoire intacts). Ouvrez le menu Mods en jeu avec **L3 + SELECT** (fonctionne en
-boot retail, aucun mode debug requis) :
-
-```
-Mods ▸ transport-ag-alert ▸ Enable
-```
-
-Le choix persiste au rechargement des niveaux. Désactivez-le pour rétablir le
-trafic d'origine.
-
-## 🎥 Encart Vidéo Démonstrative
-[![Vidéo de Démonstration](https://img.youtube.com/vi/yF5ZNcgOR10 /maxresdefault.jpg)](https://youtu.be/yF5ZNcgOR10 )
-
-▶️ **[Visionner la vidéo de démonstration sur YouTube](https://youtu.be/yF5ZNcgOR10 )**
-
-
-## 📖 Documentation Technique
-Pour l'audit technique approfondi, l'architecture et les détails d'implémentation, consultez :
 - 📄 [`docs/modding/current_mod/transport_alert_readme.md`](docs/modding/current_mod/transport_alert_readme.md)
 
 ---

@@ -1,22 +1,18 @@
-# Crimson Guard Alert Drop-Ship — Mod Readme / Transport de Troupes d'Alerte — Readme de Mod
+# Crimson Guard Alert Drop-Ship — Mod Readme
 
-> - **Branch / Branche :** `jak2/features/transport-ag/alert`
-> - **Game / Jeu :** Jak II (OpenGOAL)
-> - **Status / Statut :** Working — scripted troop transport tied to the city alert level, ~1 per minute / Fonctionnel — transport de troupes scripté lié au niveau d'alerte, ~1 par minute
-> - [🇬🇧 English Version](#-english-version)
-> - [🇫🇷 Version Française](#-version-française)
+> - **Branch:** `jak2/features/transport-ag/alert`
+> - **Game:** Jak II (OpenGOAL)
+> - **Status:** Working — scripted troop transport tied to the city alert level, ~1 per minute
 
 ---
 
-## 🇬🇧 English Version
-
-### 1. Overview & Objective
+## 1. Overview & Objective
 
 While Haven City is on **alert (level ≥ 1)**, a **Crimson Guard Troop Transport** (`transport-ag`, the retail drop-ship) descends near the player roughly **once per minute**, deploys a squad of Crimson Guards, and leaves. It is a *scripted* actor — you cannot board it, and it is not part of the ambient traffic pool.
 
 This is the sibling branch of `jak2/features/transport_traffic` (the drivable, traffic-integrated gunship). They share only the `.fr3` merc-geometry injection that makes the transport hull renderable in free-roam.
 
-### 2. How it works
+## 2. How it works
 
 | Piece | File | What it does |
 |---|---|---|
@@ -27,7 +23,7 @@ This is the sibling branch of `jak2/features/transport_traffic` (the drivable, t
 
 **Cooldown / rate:** the `alert-transport-next-check` timer is set to `current-time + 60 s` at the moment a transport spawns, and case 1 of the `cond` blocks any new spawn while one is still alive — so the effective rate never exceeds **one drop-ship per minute**.
 
-### 2b. Runtime toggle (mandatory procedure)
+## 2b. Runtime toggle (mandatory procedure)
 
 Per CLAUDE.md's golden rules the mod ships **OFF** and is switched from
 `Debug ▸ Mods ▸ transport-ag-alert ▸ Enable`.
@@ -43,7 +39,7 @@ The `traffic-manager` deftype fields, the `update-alert-transport` method and it
 init-site assignments are always compiled but are inert dead weight while the
 flag is `#f` (the method is never called).
 
-### 3. Rendering — the merc geometry `.fr3` injection
+## 3. Rendering — the merc geometry `.fr3` injection
 
 `transport-ag`'s hull geometry only ever shipped in `lprotect/ctykora/forestb/nest`, none of which are resident while free-roaming Haven City. The fix (in `decompiler/config/jak2/jak2_config.jsonc`):
 
@@ -59,7 +55,7 @@ This bakes the geometry into `lwidea.fr3 / lwideb.fr3 / lwidec.fr3` (always borr
 
 > **Requires a re-extraction** (`task extract`) so the three `.fr3` are rebuilt with the injected geometry.
 
-### 4. How to Test
+## 4. How to Test
 
 1. **Extract (once):** `task extract` — rebuilds `lwide*.fr3` with `transport-ag`.
 2. **Rebuild:** `task repl` then `(mi)` (the `traffic-manager` deftype changed — restart the REPL if `(mi)` complains).
@@ -77,7 +73,7 @@ This bakes the geometry into `lwidea.fr3 / lwideb.fr3 / lwidec.fr3` (always borr
 - `goal_src/jak2/dgos/game.gd` — `"transport-ag-alert-menu.o"` after `mods-menu.o`.
 - `decompiler/config/jak2/jak2_config.jsonc`, `goal_src/jak2/dgos/lwide{a,b,c}.gd` — `.fr3` merc injection.
 
-### 5. Current State & Known Tradeoffs
+## 5. Current State & Known Tradeoffs
 
 - **Working:** spawn / descent / guard drop / departure / 1-per-minute rate.
 - **Not interactive:** the drop-ship cannot be boarded or shot down like a real vehicle — it is the retail scripted actor. For a drivable transport, use `jak2/features/transport_traffic`.
@@ -86,7 +82,7 @@ This bakes the geometry into `lwidea.fr3 / lwideb.fr3 / lwidec.fr3` (always borr
 
 ---
 
-### 6. Modding Changes Log
+## 6. Modding Changes Log
 
 | Date | Touched/Created Files | Technical Description | Objective |
 | :--- | :--- | :--- | :--- |
@@ -95,93 +91,3 @@ This bakes the geometry into `lwidea.fr3 / lwideb.fr3 / lwidec.fr3` (always borr
 | 2026-09-02 | `traffic-manager.gc`<br>`docs/modding/current_mod/transport_alert_readme.md` | **Branch split.** Isolated the alert drop-ship onto its own branch (the drivable traffic gunship moved to `jak2/features/transport_traffic`). Post-spawn cooldown `(seconds 15)` → `(seconds 60)` so the rate is strictly one drop-ship per minute. Removed the `transport-v` traffic-type spawn wiring (`traffic-object-spawn` / `type-from-vehicle-type` cases, `want-count[20]` back to 0). New scoped readme. | One clean feature per branch; enforce the requested 1/minute rate. |
 | 2026-09-16 | `traffic-manager.gc`<br>`pc/features/transport-ag-alert-menu.gc` | **Empty-city regression fix.** `reset-actors` calls level `activate-func`s in `*level*` SLOT ORDER, so `ctywide-activate` (-> `traffic-start` -> `init-params` -> `reset-and-init`) can run AFTER `lwide-activate` and wipe everything it installed: `object-type-info-array[0..19].level` back to `#f` (no traffic spawns at all) and `(reset alert-state)` dropping the `target-jak` flag (guards ignore Jak's crimes) plus lwideb's forced war-zone alert. `init-params` now re-runs `lwide-activate` on the active lwide level, after `restore-default-settings`. Also: the drop-ship spawn no longer logs success when `process-spawn` returns `#f`, and the menu toggle no longer sends `'kill-all` + `'spawn-all` (that churned ~150 `*default-dead-pool*` slots in one frozen frame and starved the drop-ship's own spawn). | Restore Haven City's population and guard alerts after a death / checkpoint restart, without the drop-ship going missing. |
 | 2026-09-16 | `traffic-manager.gc`<br>`transport.gc` | **Drop-ship invisible in a retail boot.** `skeleton-group->draw-control` resolves an actor's art-group inside `(-> pp level)` and falls back to `art-group-load-check`, whose body is entirely inside `(when *debug-segment* ...)`. With the toggle in the old Debug menu the mod only ever ran in a `-debug` boot, where that fallback loaded `transport-ag` from disk; on the retail-safe Mods menu it returns `#f`, `initialize-skeleton` does `(go process-drawable-art-error "art-group")` and the art-error state prints nothing — a live process with no draw-control, no skeleton and no turret. `ctywide-entity-hack` replaced by `mod-alert-transport-art-hack`, which binds the drop-ship to the active lwide level (where the mod baked `transport-ag` + `tpage-2869`) and publishes ctywide's `vehicle-turret` art-group there so the chin turret still resolves. The spawn log now prints the resulting state. | Make the hull appear in a retail boot, not only under `-debug`. |
-
----
-
-## 🇫🇷 Version Française
-
-### 1. Présentation & Objectif
-
-Tant qu'Abriville est en **alerte (niveau ≥ 1)**, un **Transport de Troupes des Gardes Grenat** (`transport-ag`, le drop-ship retail) descend près du joueur environ **une fois par minute**, dépose une escouade de Gardes Grenat, puis repart. C'est un acteur *scripté* — on ne peut pas monter à bord, et il ne fait pas partie du pool de trafic ambiant.
-
-C'est la branche sœur de `jak2/features/transport_traffic` (la canonnière pilotable intégrée au trafic). Elles ne partagent que l'injection de géométrie merc `.fr3` qui rend la carlingue du transport affichable en exploration libre.
-
-### 2. Fonctionnement
-
-| Élément | Fichier | Rôle |
-|---|---|---|
-| `update-alert-transport` | `traffic-manager.gc` | Nouvelle méthode de `traffic-manager`, appelée chaque frame depuis `active:post`. Sonde le niveau d'alerte ; quand il est ≥ 1, que le cooldown de 1/minute est écoulé et qu'aucun transport n'est vivant, elle `process-spawn` un `transport` à un point aléatoire 10–18 m du joueur. |
-| `alert-transport` / `alert-transport-next-check` | `traffic-manager.gc` | Nouveaux champs : un handle vers le drop-ship vivant et le `current-time` le plus tôt où le prochain peut apparaître. Initialisés dans `reset-and-init` et `traffic-manager-init-by-other`. |
-| `transport` scripté | `transport.gc` (retail) | Logique du drop-ship retail inchangée — `come-down` → `idle` (porte ouverte, dépose via `transport-method-33`, `max-guard` 8) → `leave`. Une ligne ajoutée : `(ctywide-entity-hack)` dans `transport-init-by-other` pour que le transport lancé au runtime (sans `entity-actor`) résolve quand même son art squelettique. |
-| Injection merc `.fr3` | `jak2_config.jsonc`, `lwide{a,b,c}.gd` | `extra_art_groups_by_dgo` cuit la géométrie merc de `transport-ag` (textures résolues via la table de remap de `LPROTECT`) dans `lwidea/lwideb/lwidec.fr3` toujours résidents. Sans ça le renderer merc PC saute silencieusement la carlingue. Voir la [fiche #18](../jak2_lisp_instructions.md). |
-
-**Cooldown / cadence :** le timer `alert-transport-next-check` est fixé à `current-time + 60 s` au moment où un transport apparaît, et le cas 1 du `cond` bloque toute nouvelle apparition tant qu'un transport est vivant — donc la cadence ne dépasse jamais **un drop-ship par minute**.
-
-### 2b. Bascule à l'exécution (procédure obligatoire)
-
-Conformément aux règles d'or de CLAUDE.md le mod est livré **DÉSACTIVÉ** et se
-bascule depuis `Debug ▸ Mods ▸ transport-ag-alert ▸ Enable`.
-
-| Élément | Fichier | Rôle |
-|---|---|---|
-| `*mod-transport-ag-alert-enable*` | `traffic-manager.gc` | `define-perm` (symbol, `#f`). Non-debug, résident CWI pour que le code gardé se lie en build release ; le `#t` survit aux rechargements de niveau. |
-| garde dans `active:post` | `traffic-manager.gc` | `(when *mod-transport-ag-alert-enable* (update-alert-transport self))` — OFF = `:post` d'origine. |
-| garde dans `transport-init-by-other` | `transport.gc` | `(ctywide-entity-hack)` enveloppé dans `(when *mod-transport-ag-alert-enable* ...)` pour que les transports scriptés de l'histoire restent identiques à l'original. |
-| `mod-transport-ag-alert-build-menu` + register | `pc/debug/transport-ag-alert-menu.gc` (nouveau, `(declare-file (debug))`) | Enregistre l'unique bascule « Enable » via `mods-menu-register`. Câblé dans `game.gd` après `mods-menu.o`. |
-
-Les champs du deftype `traffic-manager`, la méthode `update-alert-transport` et
-ses assignations d'init sont toujours compilés mais restent du poids mort inerte
-tant que le flag est `#f` (la méthode n'est jamais appelée).
-
-### 3. Rendu — l'injection de géométrie merc `.fr3`
-
-La géométrie de coque de `transport-ag` n'a jamais été livrée que dans `lprotect/ctykora/forestb/nest`, aucun résident en exploration libre d'Abriville. Le correctif (dans `decompiler/config/jak2/jak2_config.jsonc`) :
-
-```jsonc
-"extra_art_groups_by_dgo": {
-  "LWIDEA.DGO": ["transport-ag:LPROTECT.DGO"],
-  "LWIDEB.DGO": ["transport-ag:LPROTECT.DGO"],
-  "LWIDEC.DGO": ["transport-ag:LPROTECT.DGO"]
-}
-```
-
-Cela cuit la géométrie dans `lwidea.fr3 / lwideb.fr3 / lwidec.fr3` (toujours empruntés dans le slot 1 de `ctywide` en exploration libre). Les entrées `transport-ag.go` + `tpage-2869.go` correspondantes sont ajoutées aux `lwidea.gd / lwideb.gd / lwidec.gd`. Aucun emprunt de niveau runtime.
-
-> **Impose une re-extraction** (`task extract`) pour que les trois `.fr3` soient reconstruits avec la géométrie injectée.
-
-### 4. Procédure de Test
-
-1. **Extraire (une fois) :** `task extract` — reconstruit `lwide*.fr3` avec `transport-ag`.
-2. **Recompiler :** `task repl` puis `(mi)` (le deftype `traffic-manager` a changé — relancer le REPL si `(mi)` proteste).
-3. **Lancer :** `task boot-game`, exploration libre d'Abriville.
-4. **Activer :** menu debug → `Debug ▸ Mods ▸ transport-ag-alert ▸ Enable` (désactivé par défaut).
-5. **Déclencher :** agresser un Garde Grenat pour lever le niveau d'alerte.
-5. **Observer :** en quelques secondes un transport descend 10–18 m du joueur, sa porte s'ouvre, ~8 gardes en sortent, et il repart. La console affiche `AT: transport drop spawned ...`.
-6. **Cadence :** rester en alerte — le prochain transport ne doit pas apparaître avant ~60 s après l'apparition du précédent.
-
-**Fichiers sources clés :**
-
-- `goal_src/jak2/levels/city/traffic/traffic-manager.gc` — `update-alert-transport` + champs + point d'appel + garde `*mod-transport-ag-alert-enable*`.
-- `goal_src/jak2/levels/city/traffic/vehicle/transport.gc` — ligne `(ctywide-entity-hack)` gardée.
-- `goal_src/jak2/pc/debug/transport-ag-alert-menu.gc` — enregistrement de la bascule Debug ▸ Mods.
-- `goal_src/jak2/dgos/game.gd` — `"transport-ag-alert-menu.o"` après `mods-menu.o`.
-- `decompiler/config/jak2/jak2_config.jsonc`, `goal_src/jak2/dgos/lwide{a,b,c}.gd` — injection merc `.fr3`.
-
-### 5. État Actuel & Compromis Connus
-
-- **Fonctionnel :** apparition / descente / dépose des gardes / départ / cadence 1 par minute.
-- **Non interactif :** le drop-ship ne peut pas être piloté ni abattu comme un vrai véhicule — c'est l'acteur scripté retail. Pour un transport pilotable, voir `jak2/features/transport_traffic`.
-- **Coque invisible avant re-extraction :** si les `lwide*.fr3` n'ont pas été reconstruits avec l'injection, le transport apparaît et dépose quand même les gardes mais n'a pas de maillage de coque (sa tourelle-menton `vehicle-turret` reste visible). Pas de crash.
-- **`jak2_config.jsonc`** porte aussi un `rip_levels: true` local et un reformatage d'espaces hérités de la branche combinée — sans conséquence, hors périmètre de cette fonctionnalité.
-
----
-
-### 6. Journal des Modifications
-
-| Date | Fichiers touchés/créés | Description technique | Objectif |
-| :--- | :--- | :--- | :--- |
-| 2026-08-29 → 09-01 | `traffic-manager.gc`<br>`transport.gc`<br>`jak2_config.jsonc`<br>`lwide{a,b,c}.gd` | Porté depuis la branche combinée `jak2/features/transport_v2` : `update-alert-transport` + champs `alert-transport`/`alert-transport-next-check` lient le drop-ship `transport` retail au niveau d'alerte ; `(ctywide-entity-hack)` ajouté à `transport-init-by-other` ; géométrie merc de `transport-ag` cuite dans `lwide*.fr3` via `extra_art_groups_by_dgo`. | Transport de troupes scripté pendant les alertes, sans emprunt de niveau runtime. |
-| 2026-09-08 | `traffic-manager.gc`<br>`transport.gc`<br>`pc/debug/transport-ag-alert-menu.gc` *(nouveau)*<br>`dgos/game.gd`<br>`README.md` | **Branche renommée** `transport_alert` → `transport-ag/alert`. **Bascule Debug ▸ Mods obligatoire :** `define-perm *mod-transport-ag-alert-enable*` (`#f`), l'appel à `update-alert-transport` et le `(ctywide-entity-hack)` ajouté sont gardés derrière elle, nouveau `transport-ag-alert-menu.gc` enregistrant la bascule « Enable » via `mods-menu-register`, câblé dans `game.gd`. Installation neuve = Jak 2 d'origine. | Non-régression native : mod désactivé par défaut, basculable en jeu. |
-| 2026-09-02 | `traffic-manager.gc`<br>`docs/modding/current_mod/transport_alert_readme.md` | **Séparation de branche.** Isolé le drop-ship d'alerte sur sa propre branche (la canonnière pilotable est passée sur `jak2/features/transport_traffic`). Cooldown post-apparition `(seconds 15)` → `(seconds 60)` pour une cadence stricte d'un drop-ship par minute. Retiré le câblage de spawn du type de trafic `transport-v` (cas `traffic-object-spawn` / `type-from-vehicle-type`, `want-count[20]` remis à 0). Nouveau readme dédié. | Une fonctionnalité propre par branche ; imposer la cadence 1/minute demandée. |
-| 2026-09-16 | `traffic-manager.gc`<br>`pc/features/transport-ag-alert-menu.gc` | **Correctif de la régression « ville vide ».** `reset-actors` appelle les `activate-func` des niveaux DANS L'ORDRE DES SLOTS de `*level*` : `ctywide-activate` (-> `traffic-start` -> `init-params` -> `reset-and-init`) peut donc s'exécuter APRÈS `lwide-activate` et effacer tout ce qu'il vient d'installer : `object-type-info-array[0..19].level` remis à `#f` (plus aucun trafic ne réapparaît) et `(reset alert-state)` qui perd le drapeau `target-jak` (les gardes ignorent les crimes de Jak) ainsi que l'alerte de guerre forcée de lwideb. `init-params` relance désormais `lwide-activate` sur le niveau lwide actif, après `restore-default-settings`. Également : l'apparition du drop-ship n'affiche plus un succès quand `process-spawn` renvoie `#f`, et la bascule du menu n'envoie plus `'kill-all` + `'spawn-all` (elle recyclait ~150 slots de `*default-dead-pool*` en une seule frame gelée et affamait l'apparition du drop-ship elle-même). | Restaurer la population de Haven City et l'alerte des gardes après une mort / reprise à un checkpoint, sans faire disparaître le drop-ship. |
-| 2026-09-16 | `traffic-manager.gc`<br>`transport.gc` | **Drop-ship invisible en boot retail.** `skeleton-group->draw-control` résout l'art-group d'un acteur dans `(-> pp level)` et se rabat sur `art-group-load-check`, dont tout le corps est dans `(when *debug-segment* ...)`. Avec la bascule dans l'ancien menu Debug, le mod ne tournait qu'en boot `-debug`, où ce repli chargeait `transport-ag` depuis le disque ; via le menu Mods retail-safe il renvoie `#f`, `initialize-skeleton` fait `(go process-drawable-art-error "art-group")` et cet état n'affiche rien — un process vivant sans draw-control, sans squelette et sans tourelle. `ctywide-entity-hack` remplacé par `mod-alert-transport-art-hack`, qui lie le drop-ship au niveau lwide actif (où le mod a cuit `transport-ag` + `tpage-2869`) et y publie l'art-group `vehicle-turret` de ctywide pour que la tourelle-menton résolve toujours. Le log d'apparition affiche désormais l'état résultant. | Faire apparaître la coque en boot retail, et pas seulement sous `-debug`. |
