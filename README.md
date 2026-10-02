@@ -1,4 +1,4 @@
-# Crimson Guard Alert Drop-Ship
+# KG-Transporter Alert — Jak 2
 
 <p align="center">
   <img src="https://img.shields.io/badge/OpenGOAL-Mod-blue.svg" alt="OpenGOAL Mod">
